@@ -1,0 +1,44 @@
+{% extends "blog/base.html" %}
+{% block title %}Entry #{{ entry.pk }}{% endblock %}
+{% block content %}
+<h1>{{ entry.title|default:"Entry" }} <small style="font-weight:normal;color:#666;">#{{ entry.pk }}</small></h1>
+
+<p class="meta">
+  WordPress: <strong>{{ entry.wordpress_status }}</strong>
+  {% if entry.wordpress_post_id %}· post id {{ entry.wordpress_post_id }}{% endif %}
+  {% if wordpress_url %}· <span class="hint">{{ wordpress_url }}</span>{% endif %}
+</p>
+
+{% if entry.publish_error %}
+<p class="error"><strong>Last error:</strong> {{ entry.publish_error }}</p>
+{% endif %}
+{% if entry.email_notify_error %}
+<p class="error"><strong>Email error:</strong> {{ entry.email_notify_error }}</p>
+{% endif %}
+
+<section class="preview-section">
+  <h2>Generated content (preview)</h2>
+  {% if preview_html %}
+  <article class="blog-preview">{{ preview_html|safe }}</article>
+  {% else %}
+  <p class="hint">No body stored.</p>
+  {% endif %}
+</section>
+
+<details class="script-details">
+  <summary>Original script</summary>
+  <pre class="body">{{ entry.oracle_script }}</pre>
+</details>
+
+{% if wp_admin_url or public_url or publish_url %}
+<section class="post-section">
+  <h2>Links</h2>
+  <ul>
+    {% if wp_admin_url %}<li><a href="{{ wp_admin_url }}" target="_blank" rel="noopener">WordPress admin (edit draft)</a></li>{% endif %}
+    {% if public_url %}<li><a href="{{ public_url }}" target="_blank" rel="noopener">Public URL</a></li>{% endif %}
+    {% if publish_url %}<li><a href="{{ publish_url }}"><strong>One-click publish</strong></a> (while link is active)</li>{% endif %}
+  </ul>
+</section>
+{% endif %}
+
+{% endblock %}

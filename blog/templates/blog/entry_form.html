@@ -1,0 +1,11 @@
+{% extends "blog/base.html" %}
+{% block title %}Generate blog{% endblock %}
+{% block content %}
+<h1>Create WordPress draft from script</h1>
+<p>One step: Mistral turns your script into a post, a <strong>draft</strong> is created on WordPress, and you get an <strong>email</strong> with a link to review and a <strong>one-click publish</strong> link. Configure <code>MISTRAL_API_KEY</code>, <code>WORDPRESS_*</code>, and email settings in <code>.env</code>.</p>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create WordPress draft &amp; email me</button>
+</form>
+{% endblock %}

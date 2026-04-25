@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Mistral → WordPress{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 56rem; margin: 2rem auto; padding: 0 1rem; }
+    nav a { margin-right: 1rem; }
+    textarea { width: 100%; box-sizing: border-box; }
+    pre.body { white-space: pre-wrap; background: #f6f6f6; padding: 1rem; border-radius: 6px; }
+    .error { color: #a00; }
+    ul.messages { list-style: none; padding: 0; }
+    ul.messages li { padding: 0.5rem; margin: 0.25rem 0; border-radius: 4px; background: #eef; }
+    ul.messages li.error { background: #fee; }
+    ul.messages li.success { background: #efe; }
+    .meta { margin: 1rem 0; }
+    .hint { color: #555; font-size: 0.95rem; }
+    .blog-preview {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0 2rem;
+      background: #fff;
+      line-height: 1.6;
+    }
+    .blog-preview h1, .blog-preview h2, .blog-preview h3 { margin-top: 1.25em; }
+    .blog-preview pre { background: #f4f4f4; padding: 0.75rem; overflow: auto; border-radius: 4px; }
+    .script-details { margin: 1.5rem 0; }
+    .post-section { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 2px solid #eee; }
+    .wordpress-form .btn-post {
+      margin-top: 1rem;
+      padding: 0.6rem 1.25rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #1d6f42;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+    }
+    .wordpress-form .btn-post:hover { background: #165a36; }
+    .form-errors { margin-bottom: 1rem; }
+    .success-banner { background: #e8f5e9; padding: 0.75rem 1rem; border-radius: 6px; }
+    ul.link-list li { margin: 0.5rem 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{% url 'entry_list' %}">All entries</a>
+    <a href="{% url 'entry_create' %}">New draft</a>
+  </nav>
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</body>
+</html>

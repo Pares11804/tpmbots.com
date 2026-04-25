@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+{% block title %}{% if ok %}Published{% else %}Publish failed{% endif %}{% endblock %}
+{% block content %}
+{% if ok %}
+<h1>Published</h1>
+<p>{{ message }}</p>
+{% if live_url %}
+<p><a href="{{ live_url }}" target="_blank" rel="noopener">View live post</a></p>
+{% endif %}
+{% else %}
+<h1>Could not publish</h1>
+<p class="error">{{ message }}</p>
+{% endif %}
+<p><a href="{% url 'entry_detail' entry.pk %}">Back to entry</a></p>
+{% endblock %}

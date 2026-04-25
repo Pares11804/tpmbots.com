@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+{% block title %}Draft created{% endblock %}
+{% block content %}
+<h1>Draft created on WordPress</h1>
+
+{% if email_error %}
+<p class="error"><strong>Email could not be sent:</strong> {{ email_error }}</p>
+<p>Use the links below (same as in the email when delivery works).</p>
+{% else %}
+<p>An email was sent to your notification address with these links.</p>
+{% endif %}
+
+<ul class="link-list">
+  <li><a href="{{ admin_url }}" target="_blank" rel="noopener">Review / edit in WordPress admin</a></li>
+  <li><a href="{{ public_url }}" target="_blank" rel="noopener">Public post URL</a> (full content after publish; drafts may need you to be logged in)</li>
+  <li><strong><a href="{{ publish_url }}">Publish now (one click)</a></strong> — no WordPress login required</li>
+</ul>
+
+<p class="hint">The one-click link stops working after a successful publish.</p>
+
+<p><a href="{% url 'entry_detail' entry.pk %}">Open this entry in the app</a> · <a href="{% url 'entry_create' %}">Create another</a></p>
+{% endblock %}
