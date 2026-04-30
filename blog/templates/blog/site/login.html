@@ -1,0 +1,27 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Welcome back</h1>
+  <p class="lead">Use the email address you registered with as your username.</p>
+</section>
+<div class="card" style="max-width:28rem;">
+  {% if form.non_field_errors %}
+  <div class="form-errors">{{ form.non_field_errors }}</div>
+  {% endif %}
+  <form method="post" action="{% url 'accounts_login' %}">
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {{ field.errors }}
+    </p>
+    {% endfor %}
+    <p style="margin-top:1.25rem;">
+      <button type="submit" class="btn btn-primary">Log in</button>
+    </p>
+  </form>
+  <p class="muted" style="margin-bottom:0;">New here? <a href="{% url 'register' %}">Create an account</a></p>
+</div>
+{% endblock %}

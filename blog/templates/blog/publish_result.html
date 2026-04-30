@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
-{% block title %}{% if ok %}Published{% else %}Publish failed{% endif %}{% endblock %}
-{% block content %}
+{% block pipeline_title %}{% if ok %}Published{% else %}Publish failed{% endif %}{% endblock %}
+{% block pipeline_content %}
 {% if ok %}
 <h1>Published</h1>
 <p>{{ message }}</p>

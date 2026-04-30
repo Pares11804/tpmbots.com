@@ -1,0 +1,54 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Your TPMBOTS workspace</h1>
+  <p class="lead">Submit blog copy, track approvals, and keep an eye on your next scheduled publish window.</p>
+</section>
+
+<div class="grid-2">
+  <div class="card">
+    <h2 style="margin-top:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;">Account</h2>
+    <table class="meta">
+      <tr><th>Email verified</th><td>{% if profile.email_verified %}Yes{% else %}No — check your inbox{% endif %}</td></tr>
+      <tr><th>Plan</th><td>{{ profile.get_tier_display|default:"Not set" }}</td></tr>
+      <tr><th>Monthly price (guide)</th><td>${{ profile.monthly_price_usd }} USD</td></tr>
+      <tr><th>Trial</th><td>
+        {% if profile.trial_ends_at %}
+          {% if profile.trial_active %}Active until {{ profile.trial_ends_at|date:"M j, Y" }}{% else %}Ended {{ profile.trial_ends_at|date:"M j, Y" }}{% endif %}
+        {% else %}—{% endif %}
+      </td></tr>
+      <tr><th>Can submit posts</th><td>{% if can_post %}Yes{% else %}Complete subscription or billing flags in admin{% endif %}</td></tr>
+    </table>
+    {% if not profile.tier or not profile.billing_setup_complete %}
+    <p style="margin-top:1rem;"><a class="btn btn-primary" href="{% url 'subscribe' %}">Finish subscription setup</a></p>
+    {% endif %}
+    {% if profile.trial_active and not profile.paid_current_period %}
+    <p class="muted" style="margin-top:0.75rem;">After the trial, your operator marks <code>paid_current_period</code> in Django admin (or a Stripe webhook) so publishing continues.</p>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;">Quick actions</h2>
+    {% if can_post %}
+    <p><a class="btn btn-primary" href="{% url 'dashboard_submit' %}">Submit new blog text</a></p>
+    {% else %}
+    <p class="muted">Complete email verification, plan selection, and payment acknowledgement to unlock submissions.</p>
+    {% endif %}
+  </div>
+</div>
+
+<h2 style="margin-top:2.5rem;font-family:'Instrument Serif',Georgia,serif;font-weight:400;">Recent submissions</h2>
+{% if entries %}
+<ul style="list-style:none;padding:0;">
+  {% for e in entries %}
+  <li class="card" style="margin-bottom:0.75rem;padding:1rem 1.25rem;">
+    <a href="{% url 'customer_entry_detail' e.pk %}"><strong>{{ e.title|default:"Untitled" }}</strong></a>
+    <span class="tag" style="margin-left:0.5rem;">{{ e.get_approval_status_display }}</span>
+    <p class="muted" style="margin:0.35rem 0 0;font-size:0.88rem;">Updated {{ e.updated_at }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="muted">No submissions yet.</p>
+{% endif %}
+{% endblock %}

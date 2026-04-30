@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
-{% block title %}Entries · Mistral → WordPress{% endblock %}
-{% block content %}
+{% block pipeline_title %}Entries{% endblock %}
+{% block pipeline_content %}
 <h1>Saved blog entries</h1>
 {% if entries %}
 <ul>
@@ -16,4 +16,4 @@
 {% else %}
 <p>No entries yet. <a href="{% url 'entry_create' %}">Generate one</a>.</p>
 {% endif %}
-{% endblock %}
+{% endblock pipeline_content %}

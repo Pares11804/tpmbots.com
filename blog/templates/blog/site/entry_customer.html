@@ -1,0 +1,52 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}{{ entry.title|default:"Draft" }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>{{ entry.title|default:"Untitled draft" }}</h1>
+  <p class="lead">
+    <span class="tag">{{ entry.get_approval_status_display }}</span>
+    {% if entry.scheduled_publish_at %}
+    <span class="muted" style="margin-left:0.5rem;">Scheduled publish (UTC): {{ entry.scheduled_publish_at }}</span>
+    {% endif %}
+  </p>
+</section>
+
+<div class="grid-2">
+  <div class="card">
+    <h2 style="margin-top:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;">Edit &amp; approve</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% for field in edit_form %}
+      <p>
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      </p>
+      {% endfor %}
+      <p style="display:flex;flex-wrap:wrap;gap:0.65rem;margin-top:1rem;">
+        <button type="submit" name="action" value="save_draft" class="btn btn-ghost">Save draft</button>
+        {% if entry.approval_status == "pending_customer" %}
+        <button type="submit" name="action" value="approve" class="btn btn-primary">Approve &amp; publish live</button>
+        <button type="submit" name="action" value="discard" class="btn btn-ghost" style="border-color:rgba(240,128,128,.45);color:var(--danger);">Discard</button>
+        {% endif %}
+      </p>
+    </form>
+    <p class="muted" style="margin-bottom:0;">
+      Your post was generated with Mistral and saved as a WordPress <strong>draft</strong> (check your email for wp-admin and preview links).
+      Approve here to <strong>publish live</strong> on your site, or edit further in WordPress first.
+    </p>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;">Preview</h2>
+    {% if preview_html %}
+    <div class="blog-preview">{{ preview_html|safe }}</div>
+    {% else %}
+    <p class="muted">Nothing to preview yet.</p>
+    {% endif %}
+    {% if entry.publish_error %}
+    <p class="muted" style="color:var(--danger);"><strong>Last error:</strong> {{ entry.publish_error }}</p>
+    {% endif %}
+  </div>
+</div>
+<p><a href="{% url 'dashboard' %}">← Back to dashboard</a></p>
+{% endblock %}

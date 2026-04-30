@@ -1,0 +1,35 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Pricing{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Simple plans built around how often you publish.</h1>
+  <p class="lead">All plans include CAPTCHA + email verification, scheduling, draft review, and approval-gated publishing.</p>
+</section>
+
+<div class="grid-3">
+  <div class="card">
+    <span class="tag">Text</span>
+    <p class="price">$20 <small>/ month</small></p>
+    <h3 style="margin:0.5rem 0 0.75rem;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.35rem;">Weekly text post</h3>
+    <p class="muted">One formatted-text blog per week—ideal for newsletters, release notes, or thought leadership without image production.</p>
+  </div>
+  <div class="card">
+    <span class="tag">Text + images</span>
+    <p class="price">$30 <small>/ month</small></p>
+    <h3 style="margin:0.5rem 0 0.75rem;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.35rem;">Up to four blogs</h3>
+    <p class="muted">When you need light imagery (roughly 1–2 images per post), we bundle up to <strong>four blogs per month</strong> at this tier.</p>
+  </div>
+  <div class="card">
+    <span class="tag">Frequency</span>
+    <p class="price">× <small>your cadence</small></p>
+    <h3 style="margin:0.5rem 0 0.75rem;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:1.35rem;">More than weekly</h3>
+    <p class="muted">For pure text plans, each extra weekly slot multiplies the <strong>$20</strong> base (for example, twice per week ≈ <strong>$40</strong>/month before taxes).</p>
+  </div>
+</div>
+
+<p class="muted" style="margin-top:2rem;max-width:60ch;">
+  After you register and confirm email, you choose a plan, add payment details, and receive a <strong>one-month free trial</strong>.
+  You also choose the weekday, time of day, and how many hours before publish we should email your draft for review.
+</p>
+<p><a class="btn btn-primary" href="{% url 'register' %}">Get started</a></p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Submit blog{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Create your next post</h1>
+  <p class="lead">
+    Enter a title, your notes or outline, and an optional WordPress category.
+    TPMBOTS calls <strong>Mistral AI</strong> to write the full post, creates a <strong>draft on your WordPress site</strong> (e.g. pvmehta.com),
+    and emails you links to edit in wp-admin or approve to publish live.
+  </p>
+</section>
+<div class="card" style="max-width:44rem;">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+      {{ field.errors }}
+    </p>
+    {% endfor %}
+    <p style="margin-top:1.25rem;">
+      <button type="submit" class="btn btn-primary">Generate with Mistral &amp; create WordPress draft</button>
+      <a class="btn btn-ghost" href="{% url 'dashboard' %}">Cancel</a>
+    </p>
+  </form>
+</div>
+{% endblock %}

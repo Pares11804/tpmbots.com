@@ -1,0 +1,53 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Create your TPMBOTS account</h1>
+  <p class="lead">Register with your email and password, then confirm your email to continue.</p>
+</section>
+<div class="card" style="max-width:32rem;">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="form-errors">{{ form.non_field_errors }}</div>
+    {% endif %}
+    <div class="card" style="margin-bottom:1rem;padding:0.9rem 1rem;background:rgba(94,224,163,.08);border-color:rgba(94,224,163,.28);">
+      <p style="margin:0;color:var(--text);font-weight:700;letter-spacing:0.01em;">Human check</p>
+      <p style="margin:0.2rem 0 0;color:var(--text);font-size:1.02rem;">
+        {{ captcha_question|default:"Refresh the page to load CAPTCHA." }}
+      </p>
+    </div>
+    {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+      {{ field.errors }}
+    </p>
+    {% endfor %}
+    <p style="margin-top:0.5rem;">
+      <label style="display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer;font-weight:500;">
+        <input type="checkbox" id="show-password-toggle" style="width:auto;">
+        Show password
+      </label>
+    </p>
+    <p style="margin-top:1.25rem;">
+      <button type="submit" class="btn btn-primary">Create account</button>
+    </p>
+  </form>
+  <p class="muted" style="margin-bottom:0;">Already registered? <a href="{% url 'accounts_login' %}">Log in</a></p>
+</div>
+<script>
+  (function () {
+    const toggle = document.getElementById("show-password-toggle");
+    const p1 = document.getElementById("id_password1");
+    const p2 = document.getElementById("id_password2");
+    if (!toggle || !p1 || !p2) return;
+    toggle.addEventListener("change", function () {
+      const t = toggle.checked ? "text" : "password";
+      p1.type = t;
+      p2.type = t;
+    });
+  })();
+</script>
+{% endblock %}

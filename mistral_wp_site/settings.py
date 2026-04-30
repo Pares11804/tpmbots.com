@@ -95,8 +95,15 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    p for p in (BASE_DIR / "images", BASE_DIR / "imaes") if p.exists()
+]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
 
 # --- Email (draft notifications + publish link) ---
 EMAIL_BACKEND = os.environ.get(
@@ -119,6 +126,11 @@ DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "webmaster@localhost")
 NOTIFICATION_EMAIL = os.environ.get("NOTIFICATION_EMAIL", "vaatrak@gmail.com")
 # Base URL for links in emails (no trailing slash), e.g. http://127.0.0.1:8000 or https://your-domain.com
 SITE_BASE_URL = os.environ.get("SITE_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
+# When true, customer draft-review email is sent as soon as they submit (testing).
+# Set IMMEDIATE_CUSTOMER_DRAFT_EMAIL=false in production to use draft_lead_hours + cron only.
+IMMEDIATE_CUSTOMER_DRAFT_EMAIL = os.environ.get(
+    "IMMEDIATE_CUSTOMER_DRAFT_EMAIL", "true"
+).lower() in ("1", "true", "yes")
 # Optional default WP category when the form leaves category blank
 WORDPRESS_DEFAULT_CATEGORY = os.environ.get("WORDPRESS_DEFAULT_CATEGORY", "").strip()
 WORDPRESS_URL = os.environ.get("WORDPRESS_URL", "").strip()

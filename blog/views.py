@@ -153,12 +153,14 @@ def publish_entry(request: HttpRequest, pk: int, token: str) -> HttpResponse:
     entry.publish_secret_token = ""
     entry.wordpress_status = "publish"
     entry.publish_error = ""
+    entry.approval_status = BlogEntry.ApprovalStatus.PUBLISHED
     entry.save(
         update_fields=[
             "publish_secret_token",
             "wordpress_status",
             "publish_error",
             "updated_at",
+            "approval_status",
         ]
     )
     wp_base = (settings.WORDPRESS_URL or "").strip().rstrip("/")

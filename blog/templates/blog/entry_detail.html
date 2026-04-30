@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
-{% block title %}Entry #{{ entry.pk }}{% endblock %}
-{% block content %}
+{% block pipeline_title %}Entry #{{ entry.pk }}{% endblock %}
+{% block pipeline_content %}
 <h1>{{ entry.title|default:"Entry" }} <small style="font-weight:normal;color:#666;">#{{ entry.pk }}</small></h1>
 
 <p class="meta">
@@ -19,7 +19,7 @@
 <section class="preview-section">
   <h2>Generated content (preview)</h2>
   {% if preview_html %}
-  <article class="blog-preview">{{ preview_html|safe }}</article>
+  <div class="blog-preview">{{ preview_html|safe }}</div>
   {% else %}
   <p class="hint">No body stored.</p>
   {% endif %}

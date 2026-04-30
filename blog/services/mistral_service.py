@@ -64,3 +64,59 @@ def generate_blog_from_oracle_script(
         ],
     )
     return response.choices[0].message.content or ""
+
+
+def generate_blog_from_customer_brief(
+    *,
+    title: str,
+    customer_brief: str,
+    category_name: str = "",
+    api_key: str | None = None,
+    model: str = DEFAULT_MISTRAL_MODEL,
+) -> str:
+    """
+    Turn customer title + notes + optional category into a full blog post (Markdown).
+    """
+    key = api_key or os.environ.get("MISTRAL_API_KEY")
+    if not key or not str(key).strip():
+        raise ValueError("MISTRAL_API_KEY is missing (env or argument).")
+
+    cat = (category_name or "").strip()
+    cat_block = f"\nPreferred WordPress category name: {cat}\n" if cat else ""
+
+    timeout_ms = _timeout_ms()
+    client = Mistral(api_key=key, timeout_ms=timeout_ms)
+    response = client.chat.complete(
+        model=model,
+        timeout_ms=timeout_ms,
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are an expert business and technology blog writer. "
+                    "Write clear, professional posts suitable for a public website. "
+                    "Output MUST be valid Markdown that will convert to rich HTML: "
+                    "use ## and ### section headings (at least 3 distinct sections after the intro), "
+                    "unordered or numbered lists for steps or takeaways, **bold** for key terms, "
+                    "and blank lines between paragraphs. "
+                    "Optionally use > blockquotes for a short summary or callout, and Markdown tables when comparing options. "
+                    "Do not use HTML tags in the body unless quoting code. "
+                    "Do not fabricate facts; expand only from the author's notes when reasonable."
+                ),
+            },
+            {
+                "role": "user",
+                "content": (
+                    f"Proposed title: {title.strip() or '(untitled)'}\n\n"
+                    f"Author notes / outline / source material:\n{customer_brief.strip()}\n"
+                    f"{cat_block}\n"
+                    "Write the full blog post body in Markdown only. "
+                    "Structure: (1) opening intro as one or two paragraphs with no heading, "
+                    "(2) then ## sections with ### subsections as needed, "
+                    "(3) end with a brief conclusion or next steps. "
+                    "If repeating the proposed title as an H1 would be redundant, start sections with ## instead of #."
+                ),
+            },
+        ],
+    )
+    return response.choices[0].message.content or ""

@@ -1,0 +1,44 @@
+{% extends "blog/site/site_base.html" %}
+{% block title %}Subscription &amp; schedule{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Choose your plan and publishing rhythm</h1>
+  <p class="lead">Confirm payment details for after your trial, pick your weekly slot, and tell us how far ahead to email drafts.</p>
+</section>
+<div class="card" style="max-width:40rem;">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<span class="helptext">{{ field.help_text }}</span>{% endif %}
+      {{ field.errors }}
+    </p>
+    {% endfor %}
+    <p style="margin-top:1.25rem;">
+      <button type="submit" class="btn btn-primary">Save plan &amp; start trial</button>
+    </p>
+  </form>
+  <p class="muted" style="margin-bottom:0;">Your first month is free after payment details are on file. TPMBOTS operators can mark post-trial billing in admin when you connect Stripe later.</p>
+</div>
+<style>
+  #id_posts_per_week[readonly] { opacity: 0.55; cursor: not-allowed; }
+</style>
+<script>
+  (function () {
+    const tier = document.getElementById("id_tier");
+    const posts = document.getElementById("id_posts_per_week");
+    if (!tier || !posts) return;
+    function sync() {
+      const custom = tier.value === "text_custom";
+      posts.readOnly = !custom;
+      posts.style.opacity = custom ? "1" : "0.55";
+      posts.style.cursor = custom ? "" : "not-allowed";
+      if (!custom) posts.value = "1";
+    }
+    tier.addEventListener("change", sync);
+    sync();
+  })();
+</script>
+{% endblock %}
